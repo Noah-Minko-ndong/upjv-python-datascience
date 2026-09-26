@@ -1,6 +1,4 @@
-# upjv-python-datascience
-travaux dirigés Python &amp; Data science -- UPJV Amiens
-"""# Python & Data Science — UPJV Amiens
+# Python & Data Science — UPJV Amiens
 
 **Étudiant·e :** Noah Minko-ndong
 **Formation :** L3 Économie 
@@ -22,6 +20,3 @@ Python & Data Science réalisés sur Google Colab.
 ## Crédits
 
 Cours de M. Guéry — Faculté d'Économie, UPJV
-"""
-
-print(README)
