@@ -1,4 +1,4 @@
-name:  .github/workflows/tests_td.yml
+name:  Tests TD
 
 on:
   push:
