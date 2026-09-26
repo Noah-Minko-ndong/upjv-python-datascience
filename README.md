@@ -2,8 +2,8 @@
 travaux dirigés Python &amp; Data science -- UPJV Amiens
 """# Python & Data Science — UPJV Amiens
 
-**Étudiant·e :** Prénom Nom
-**Formation :** L3 Économie / M1 Économie
+**Étudiant·e :** Noah Minko-ndong
+**Formation :** L3 Économie 
 **Année :** 2026-2027
 
 ## Description
