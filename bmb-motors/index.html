@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BMB Motors Cocody</title>
+<meta name="description" content="BMB Motors, concession automobile à Cocody (Abidjan). Visitez le showroom en 3D, découvrez nos véhicules et contactez-nous.">
+<meta name="theme-color" content="#17191C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;800&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="preload" as="image" href="assets/affiche-portrait.jpg" media="(orientation: portrait)">
+<link rel="preload" as="image" href="assets/affiche-paysage.jpg" media="(orientation: landscape)">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<!--CONTENU-->
+<a class="evitement" href="#vehicules">Aller directement aux véhicules</a>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="marque" href="#haut" aria-label="BMB Motors, retour en haut">
+      <svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="#EDEDEA"/><g fill="#F0501E"><circle cx="17" cy="17" r="2.6"/><ellipse cx="17" cy="9.4" rx="2.8" ry="3.6"/><ellipse cx="24.2" cy="14.6" rx="2.8" ry="3.6" transform="rotate(72 24.2 14.6)"/><ellipse cx="21.5" cy="23.2" rx="2.8" ry="3.6" transform="rotate(144 21.5 23.2)"/><ellipse cx="12.5" cy="23.2" rx="2.8" ry="3.6" transform="rotate(216 12.5 23.2)"/><ellipse cx="9.8" cy="14.6" rx="2.8" ry="3.6" transform="rotate(288 9.8 14.6)"/></g></svg>
+      <span>BMB MOTORS</span>
+    </a>
+    <nav class="nav-liens" aria-label="Navigation principale">
+      <a href="#visite">Visite 3D</a>
+      <a href="#vehicules">Véhicules</a>
+      <a href="#showroom">Showroom</a>
+      <a class="btn btn-bmb btn-petit" href="#contact">Nous contacter</a>
+    </nav>
+  </div>
+</header>
+
+<main id="haut">
+  <section class="visite" id="visite" aria-label="Visite du showroom en 3D">
+    <div class="visite-ecran" id="visite-ecran">
+      <picture>
+        <source media="(orientation: portrait)" srcset="assets/affiche-portrait.jpg">
+        <img class="visite-affiche" id="visite-affiche" src="assets/affiche-paysage.jpg" alt="" aria-hidden="true">
+      </picture>
+      <canvas class="visite-canvas" id="visite-canvas" role="img" aria-label="Le showroom BMB Motors en 3D : la caméra avance au fil du défilement de la page"></canvas>
+
+      <div class="chapitres" id="chapitres" aria-hidden="true">
+        <div class="chapitres-barre" id="chapitres-barre"></div>
+        <p class="chapitres-titre" id="chapitres-titre">Façade</p>
+      </div>
+
+      <div class="panneaux" id="panneaux">
+        <div class="panneau panneau-accueil" data-panneau="accueil">
+          <p class="lieu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Cocody, Abidjan</p>
+          <h1>Entrez dans le showroom BMB&nbsp;Motors.</h1>
+          <p class="chapo">Faites défiler : on monte les marches, on traverse l'allée et chaque véhicule vous attend sur sa place.</p>
+          <div class="actions">
+            <a class="btn btn-bmb" href="#visite" data-aller="entree">Commencer la visite</a>
+            <a class="btn btn-ligne" href="#vehicules">Voir les véhicules</a>
+          </div>
+        </div>
+        <!-- fiches des véhicules : générées depuis src/donnees.js -->
+        <div class="panneau panneau-fin" data-panneau="fin">
+          <h2>Et bien d'autres véhicules au showroom.</h2>
+          <p class="chapo">Passez nous voir à Cocody, ou parcourez tout le catalogue.</p>
+          <div class="actions">
+            <a class="btn btn-bmb" href="#vehicules">Tout le catalogue</a>
+            <a class="btn btn-ligne" href="#contact">Venir au showroom</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="chargement" id="chargement" role="status">
+        <span class="chargement-roue" aria-hidden="true"></span>
+        <span id="chargement-texte">Préparation du showroom…</span>
+      </div>
+      <p class="indice" id="indice" aria-hidden="true">Faites défiler<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></p>
+      <a class="passer" href="#vehicules">Passer la visite</a>
+    </div>
+    <div class="visite-statique" id="visite-statique" hidden>
+      <p class="chapo">Visite 3D désactivée (animations réduites ou appareil non compatible).</p>
+      <button class="btn btn-ligne" type="button" id="forcer-3d" hidden>Lancer la visite 3D quand même</button>
+    </div>
+  </section>
+
+  <section class="bloc" id="vehicules">
+    <div class="entete">
+      <div>
+        <p class="surtitre">Catalogue</p>
+        <h2 class="titre">Nos véhicules</h2>
+        <p class="chapo">Tous ces modèles sont visibles au showroom. Demandez un essai ou un devis.</p>
+      </div>
+      <p class="compte" id="compte" aria-live="polite"></p>
+    </div>
+    <div class="filtres">
+      <div class="filtres-groupe" role="group" aria-label="Catégorie" id="filtre-categorie"></div>
+      <div class="filtres-groupe" role="group" aria-label="Énergie" id="filtre-energie"></div>
+    </div>
+    <div class="grille" id="grille"></div>
+  </section>
+
+  <section class="showroom" id="showroom">
+    <div class="showroom-image">
+      <img src="assets/photos/showroom-allee.jpg" alt="Le showroom BMB Motors : sol en marbre, piliers blancs, plafond anthracite et véhicules exposés" loading="lazy" width="1179" height="740">
+    </div>
+    <div class="bloc showroom-texte">
+      <p class="surtitre">Le lieu</p>
+      <h2 class="titre">Le showroom</h2>
+      <p class="chapo">Un grand espace lumineux à Cocody : sol en marbre, plafond haut, et chaque véhicule exposé à hauteur d'yeux. Prenez le temps d'en faire le tour, d'ouvrir les portes et de vous asseoir au volant.</p>
+      <ul class="atouts">
+        <li><strong>Sur place</strong><span>Tous les véhicules du site sont exposés au showroom.</span></li>
+        <li><strong>Essais</strong><span>Demandez un essai par téléphone ou WhatsApp.</span></li>
+        <li><strong>Horaires</strong><span data-contact="horaires"></span></li>
+      </ul>
+    </div>
+    <div class="galerie">
+      <figure><img src="assets/photos/212-logo.jpg" alt="Le 4x4 212 vert exposé devant l'enseigne BMB Motors" loading="lazy" width="1179" height="1240"><figcaption>Le tout-terrain 212, devant l'enseigne</figcaption></figure>
+      <figure><img src="assets/photos/suv-electriques.jpg" alt="SUV électriques blancs, l'un décoré d'un grand nœud rouge" loading="lazy" width="1179" height="1200"><figcaption>Arrivages électriques, prêts à être livrés</figcaption></figure>
+      <figure><img src="assets/photos/showroom-allee-haut.jpg" alt="Allée du showroom avec le logo BMB Motors au fond" loading="lazy" width="1179" height="1430"><figcaption>L'allée, jusqu'au mur du logo</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="bloc" id="contact">
+    <div class="contact">
+      <div>
+        <p class="surtitre">Contact</p>
+        <h2 class="titre">Venez nous voir</h2>
+        <p class="chapo">Appelez-nous ou écrivez-nous sur WhatsApp pour réserver un essai.</p>
+        <dl class="infos">
+          <div><dt>Adresse</dt><dd data-contact="adresse"></dd></div>
+          <div><dt>Horaires</dt><dd data-contact="horaires"></dd></div>
+          <div><dt>Téléphone</dt><dd data-contact="telephone"></dd></div>
+        </dl>
+        <div class="actions" data-actions-contact></div>
+      </div>
+      <div class="plan">
+        <svg viewBox="0 0 400 400" role="img" aria-label="Plan schématique : BMB Motors à Cocody">
+          <rect width="400" height="400" fill="#212428"/>
+          <g stroke="#30343A" stroke-width="14" fill="none" stroke-linecap="round">
+            <path d="M-20 120 C120 140 260 90 420 110"/><path d="M80 -20 C100 140 140 260 120 420"/>
+            <path d="M-20 300 C140 280 280 320 420 290"/><path d="M300 -20 C280 120 310 260 290 420"/>
+          </g>
+          <g stroke="#2A2D32" stroke-width="6" fill="none"><path d="M-20 210 L420 200"/><path d="M200 -20 L210 420"/></g>
+          <circle cx="206" cy="204" r="34" fill="#F0501E" opacity=".18"/>
+          <circle cx="206" cy="204" r="12" fill="#F0501E"/>
+          <circle cx="206" cy="204" r="5" fill="#17191C"/>
+          <text x="226" y="186" fill="#EDEDEA" font-family="Manrope, sans-serif" font-weight="700" font-size="16">BMB Motors</text>
+          <text x="226" y="206" fill="#A7ABB2" font-family="Manrope, sans-serif" font-size="13">Cocody</text>
+        </svg>
+        <a class="btn btn-bmb" data-itineraire target="_blank" rel="noopener">Itinéraire</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pied">
+  <span>BMB Motors, concession automobile à Cocody, Abidjan</span>
+  <span>© 2026 BMB Motors</span>
+</footer>
+
+<nav class="barre-mobile" id="barre-mobile" aria-label="Contact rapide" data-actions-contact="compact"></nav>
+<!--/CONTENU-->
+<script type="module" src="dist/main.js"></script>
+</body>
+</html>
