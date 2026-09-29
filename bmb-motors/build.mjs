@@ -46,10 +46,14 @@ for (const img of images) {
   html = html.split(img).join(data);
   js = js.split(img).join(data);
 }
+// polices → data URI dans la feuille de style
+for (const m of css.matchAll(/url\("\.\.\/(assets\/polices\/[\w-]+\.woff2)"\)/g)) {
+  css = css.split(m[0]).join(`url("data:font/woff2;base64,${(await readFile(r(m[1]))).toString("base64")}")`);
+}
 const contenu = html.slice(html.indexOf("<!--CONTENU-->") + 14, html.indexOf("<!--/CONTENU-->"));
 const tete = html.slice(html.indexOf("<head>") + 6, html.indexOf("</head>"))
   .replace(/<link rel="stylesheet" href="css\/site.css">/, "")
-  .replace(/<link rel="preload"[^>]*>/g, "");
+  .replace(/<link rel="preload"[^>]*>\n?/g, "");
 const scriptSur = js.replace(/<\/script/gi, "<\\/script");
 
 await mkdir(r("apercu"), { recursive: true });
@@ -60,7 +64,6 @@ await writeFile(r("apercu/bmb-motors-apercu.html"),
 if (process.argv.includes("--artifact")) {
   const sortie = process.argv[process.argv.indexOf("--artifact") + 1];
   const titre = tete.match(/<title>.*?<\/title>/)[0];
-  const liens = [...tete.matchAll(/<link[^>]*fonts[^>]*>/g)].map((m) => m[0]).join("\n");
-  await writeFile(sortie, `${titre}\n${liens}\n<style>\n${css}\n</style>\n${contenu}\n<script>\n${scriptSur}\n</script>\n`);
+  await writeFile(sortie, `${titre}\n<style>\n${css}\n</style>\n${contenu}\n<script>\n${scriptSur}\n</script>\n`);
 }
 console.log("Construction terminée.");

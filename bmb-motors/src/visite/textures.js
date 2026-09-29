@@ -4,7 +4,13 @@ import * as THREE from "three";
 let anisotropie = 4;
 export function reglerAnisotropie(a) { anisotropie = a; }
 
-export const POLICE_TITRE = '"Unbounded", "Arial Black", sans-serif';
+export const POLICE_TITRE = '"Archivo", "Arial Black", sans-serif';
+
+// Lettrage large, comme l'enseigne : graisse maximale et chasse étendue quand le navigateur le permet.
+function police(g, graisse, px) {
+  g.font = `${graisse} ${px}px ${POLICE_TITRE}`;
+  if ("fontStretch" in g) g.fontStretch = "expanded";
+}
 
 function toile(w, h, dessin) {
   const c = document.createElement("canvas");
@@ -192,7 +198,7 @@ function largeurMot(g, mot, px) {
 }
 
 function ecrireMot(g, mot, x, yBase, px, couleur, trous) {
-  g.font = `800 ${px}px ${POLICE_TITRE}`;
+  police(g, 900, px);
   g.textBaseline = "alphabetic";
   let cx = x;
   for (const ch of mot) {
@@ -214,7 +220,7 @@ function ecrireMot(g, mot, x, yBase, px, couleur, trous) {
 // À remplacer par le logo vectoriel officiel si vous l'avez (voir README).
 function marqueBB(g, cx, cy, taille) {
   const t = toile(Math.ceil(taille * 1.25), Math.ceil(taille), (h, w, hh) => {
-    h.font = `800 ${taille * 0.92}px ${POLICE_TITRE}`;
+    police(h, 800, taille * 0.92);
     h.textAlign = "center"; h.textBaseline = "middle";
     // premier B, strié de coupes horizontales en biseau (effet de vitesse)
     h.fillStyle = "#F0501E";
@@ -240,7 +246,7 @@ export function enseigneFacade() {
   const W = 2048, H = 300, px = 190;
   let largeur = 0;
   const c = toile(W, H, (g) => {
-    g.font = `800 ${px}px ${POLICE_TITRE}`;
+    police(g, 900, px);
     largeur = largeurMot(g, "BMB MOTORS", px);
     ecrireMot(g, "BMB MOTORS", (W - largeur) / 2, H * 0.78, px, "#FFFFFF", "#F0501E");
   });
@@ -258,7 +264,7 @@ export function murLogo() {
   const c = toile(W, H, (g) => {
     marqueBB(g, W / 2, H * 0.3, 470);
     const px = 200;
-    g.font = `800 ${px}px ${POLICE_TITRE}`;
+    police(g, 900, px);
     const l = largeurMot(g, "BMB MOTORS", px);
     ecrireMot(g, "BMB MOTORS", (W - l) / 2, H * 0.86, px, "#141518", null);
   });
@@ -269,12 +275,12 @@ export function murLogo() {
 export function marquagePlace(numero, nom) {
   const c = toile(1024, 320, (g, w, h) => {
     g.fillStyle = "rgba(44,46,50,0.92)";
-    g.font = `800 150px ${POLICE_TITRE}`;
+    police(g, 800, 150);
     g.textBaseline = "middle";
     g.fillText(numero, 30, h * 0.52);
     const lp = g.measureText(numero).width;
     g.fillRect(lp + 70, h * 0.2, 5, h * 0.64);
-    g.font = `600 84px ${POLICE_TITRE}`;
+    police(g, 600, 84);
     g.fillText(nom.toUpperCase(), lp + 115, h * 0.54);
   });
   return versTexture(c);
@@ -338,17 +344,17 @@ export function kakemono(ligne1, ligne2) {
     g.beginPath(); g.moveTo(0, 0); g.lineTo(w, 0); g.lineTo(w, h * 0.5); g.lineTo(0, h * 0.62); g.closePath(); g.fill();
     marqueBB(g, w / 2, h * 0.17, 230);
     g.fillStyle = "#fff"; g.textAlign = "center";
-    g.font = `800 50px ${POLICE_TITRE}`;
+    police(g, 800, 50);
     g.fillText(ligne1, w / 2, h * 0.36);
-    g.font = `500 30px ${POLICE_TITRE}`;
+    police(g, 500, 30);
     g.fillText(ligne2, w / 2, h * 0.42);
     const px = 44;
-    g.font = `800 ${px}px ${POLICE_TITRE}`;
+    police(g, 900, px);
     const l = largeurMot(g, "BMB MOTORS", px);
     g.textAlign = "left";
     ecrireMot(g, "BMB MOTORS", (w - l) / 2, h * 0.86, px, "#FFFFFF", "#F0501E");
     g.fillStyle = "#A7ABB2"; g.textAlign = "center";
-    g.font = `500 24px ${POLICE_TITRE}`;
+    police(g, 500, 24);
     g.fillText("COCODY · ABIDJAN", w / 2, h * 0.92);
   });
   return versTexture(c);
@@ -362,7 +368,7 @@ export function drapeau() {
     g.save();
     g.translate(w * 0.48, h * 0.62); g.rotate(-Math.PI / 2);
     g.fillStyle = "#fff"; g.textAlign = "center"; g.textBaseline = "middle";
-    g.font = `800 110px ${POLICE_TITRE}`;
+    police(g, 800, 110);
     g.fillText("BMB", 0, 0);
     g.restore();
   });
@@ -381,13 +387,13 @@ export function panneauMural(titre, sousTitre) {
     g.fillStyle = "rgba(240,80,30,0.25)";
     g.beginPath(); g.moveTo(w * 0.5, h); g.lineTo(w * 0.72, 0); g.lineTo(w, 0); g.lineTo(w, h); g.closePath(); g.fill();
     g.fillStyle = "#fff"; g.textBaseline = "alphabetic";
-    g.font = `800 96px ${POLICE_TITRE}`;
+    police(g, 800, 96);
     g.fillText(titre, 90, h * 0.46);
     g.fillStyle = "#C9CCD1";
-    g.font = `500 44px ${POLICE_TITRE}`;
+    police(g, 500, 44);
     g.fillText(sousTitre, 92, h * 0.62);
     const px = 52;
-    g.font = `800 ${px}px ${POLICE_TITRE}`;
+    police(g, 900, px);
     ecrireMot(g, "BMB MOTORS", 92, h * 0.86, px, "#FFFFFF", "#F0501E");
   });
   return versTexture(c);
@@ -400,7 +406,7 @@ export function faceComptoir() {
     g.fillStyle = "#F0501E"; g.fillRect(0, h * 0.78, w, h * 0.08);
     marqueBB(g, w * 0.3, h * 0.42, 150);
     const px = 58;
-    g.font = `800 ${px}px ${POLICE_TITRE}`;
+    police(g, 900, px);
     ecrireMot(g, "BMB MOTORS", w * 0.42, h * 0.54, px, "#141518", "#F0501E");
   });
   return versTexture(c);

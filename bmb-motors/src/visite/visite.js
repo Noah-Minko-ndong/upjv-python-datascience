@@ -26,12 +26,12 @@ async function chargerPolices() {
   if (!document.fonts?.load) return;
   const attente = new Promise((ok) => setTimeout(ok, 2500));
   await Promise.race([
-    Promise.all([document.fonts.load(`800 100px ${POLICE_TITRE}`), document.fonts.load(`600 100px ${POLICE_TITRE}`), document.fonts.load(`500 100px ${POLICE_TITRE}`)]),
+    Promise.all([document.fonts.load(`900 100px ${POLICE_TITRE}`), document.fonts.load(`500 100px ${POLICE_TITRE}`)]),
     attente,
   ]).catch(() => {});
 }
 
-export async function demarrer({ canvas, conteneur, vehicules, ambiance, decoupage, surProgres = () => {}, surImage = () => {} }) {
+export async function demarrer({ canvas, conteneur, vehicules, ambiance, decoupage, amorti = 5.5, surProgres = () => {}, surImage = () => {} }) {
   const qualite = detecterQualite();
   const plafondPixels = { haut: 2, moyen: 1.5, bas: 1 }[qualite];
   surProgres(0.05);
@@ -122,6 +122,7 @@ export async function demarrer({ canvas, conteneur, vehicules, ambiance, decoupa
   const decalage = { x: 0, y: 0 };
   const pos = new THREE.Vector3(), vise = new THREE.Vector3();
   const activites = new Array(vehicules.length).fill(0);
+  const infos = { angle: null };
 
   function appliquer() {
     parcours.echantillonner(q, pos, vise);
@@ -147,8 +148,11 @@ export async function demarrer({ canvas, conteneur, vehicules, ambiance, decoupa
       if (a > max) { max = a; meilleure = i; }
     });
     decor.eclairerPlaces(activites);
+    infos.angle = null;
     if (meilleure >= 0) {
       const c = centrePlace(meilleure);
+      // angle de la caméra autour du véhicule : 0° face à l'avant, croissant par son côté droit
+      infos.angle = ((Math.atan2(c.z - pos.z, c.x - pos.x) * 180) / Math.PI + 360) % 360;
       douche.position.set(c.x - 1.2, 5.5, c.z + 0.4);
       douche.target.position.set(c.x, 0.4, c.z);
     }
@@ -192,12 +196,12 @@ export async function demarrer({ canvas, conteneur, vehicules, ambiance, decoupa
     precedent = t;
     const ecart = cible - q;
     const bouge = Math.abs(ecart) > 0.00002;
-    if (bouge) q += ecart * (1 - Math.exp(-dt * 5.5));
+    if (bouge) q += ecart * (1 - Math.exp(-dt * amorti));
     else q = cible;
     if (!bouge && !sale) { dernier = 0; return; }
     const encore = appliquer();
     renderer.render(scene, camera);
-    surImage(q);
+    surImage(q, infos);
     sale = encore;
     if (bouge) mesurer(t); else dernier = 0;
   }
