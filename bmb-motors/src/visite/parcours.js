@@ -41,16 +41,26 @@ export function construireParcours(vehicules, decoupage, { portrait }) {
   vehicules.forEach((v, i) => {
     const c = centrePlace(i);
     const cibleV = [c.x, 0.78, c.z];
-    // 4. Approche : on s'arrête face à la place, en trois-quarts avant
-    cle(E[`approche-${i}`].a, autour(c, R, th0, 1.5), cibleV);
-    // 5. Tour du véhicule : la caméra tourne autour, le véhicule reste garé
     const tour = E[`tour-${i}`];
-    const pas = 7;
-    for (let k = 1; k <= pas; k++) {
-      const f = k / pas;
-      const theta = th0 + (th1 - th0) * f;
-      const y = 1.5 - Math.sin(f * Math.PI) * 0.3; // on descend un peu au profil
-      cle(tour.de + (tour.a - tour.de) * f, autour(c, R, theta, y), cibleV);
+    if (v.rendu?.type === "photo") {
+      // Photo vue de face : on arrive face à la place et on s'en approche doucement,
+      // avec un léger mouvement latéral (pas de tour complet autour d'une image plate).
+      const face = [c.x, 0.85, c.z];
+      const Rf = R * 0.92;
+      cle(E[`approche-${i}`].a, autour(c, Rf + 1.2, -16 * DEG, 1.45), face);
+      cle(tour.de + (tour.a - tour.de) * 0.5, autour(c, Rf + 0.2, 0, 1.35), face);
+      cle(tour.a, autour(c, Rf - 0.6, 12 * DEG, 1.3), face);
+    } else {
+      // 4. Approche : on s'arrête face à la place, en trois-quarts avant
+      cle(E[`approche-${i}`].a, autour(c, R, th0, 1.5), cibleV);
+      // 5. Tour du véhicule : la caméra tourne autour, le véhicule reste garé
+      const pas = 7;
+      for (let k = 1; k <= pas; k++) {
+        const f = k / pas;
+        const theta = th0 + (th1 - th0) * f;
+        const y = 1.5 - Math.sin(f * Math.PI) * 0.3; // on descend un peu au profil
+        cle(tour.de + (tour.a - tour.de) * f, autour(c, R, theta, y), cibleV);
+      }
     }
     // 6. Transfert vers la place suivante, en contournant le pilier
     const tr = E[`transfert-${i}`];

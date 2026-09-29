@@ -3,6 +3,7 @@
 import { CONTACT, VISITE, CATALOGUE, AMBIANCE } from "./donnees.js";
 import { etapes, chapitres, fenetreFiche } from "./plan.js";
 import { initialiserMouvement, revelerCartes } from "./animations.js";
+import { vitrine } from "./vitrine.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -331,7 +332,6 @@ function visite(mouvement, ouverture) {
     section.classList.add("visite--statique");
     $("#visite-statique").hidden = false;
     for (const f of fenetres) { f.el.classList.add("actif"); f.el.inert = false; }
-    ouverture.terminer();
     const b = $("#forcer-3d");
     if (raison !== "webgl") {
       b.hidden = false;
@@ -355,14 +355,12 @@ function visite(mouvement, ouverture) {
         ambiance: AMBIANCE,
         decoupage,
         amorti: mouvement.lenis ? 9 : 5.5,
-        surProgres: (x) => ouverture.progres(0.1 + x * 0.9),
         surImage: majPanneaux,
       });
       moteur.definirDecalage(decalage);
       moteur.sauterA(progressionDefilement());
       window.bmbVisite = moteur; // accès pour les tests et la console
       section.classList.add("visite--prete");
-      ouverture.terminer();
     } catch (e) {
       console.error("BMB Motors : la visite 3D n'a pas pu démarrer.", e);
       modeStatique("webgl");
@@ -371,7 +369,11 @@ function visite(mouvement, ouverture) {
 
   if (!webgl) modeStatique("webgl");
   else if (REDUIT || economie) modeStatique("choix");
-  else lancer();
+  else {
+    // le moteur 3D ne se charge qu'à l'approche de la visite : la vitrine reste fluide
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { obs.disconnect(); lancer(); } }, { rootMargin: "150% 0px" });
+    obs.observe(section);
+  }
 
   // Barre de contact mobile : visible une fois la visite passée.
   const barreMobile = $("#barre-mobile");
@@ -386,6 +388,15 @@ if (document.body.classList.contains("intro-active")) {
 }
 remplirContact();
 horloge();
+vitrine({
+  racine: $("#vitrine"),
+  vehicules: VISITE,
+  valeur: val,
+  prix: prixFCFA,
+  lienEssai: (v) => lienWhatsApp(`Bonjour BMB Motors, je souhaite essayer le véhicule ${v.nom}${v.version ? " " + v.version : ""}.`),
+  reduit: REDUIT,
+  surPrete: () => { ouverture.progres(1); ouverture.terminer(); },
+});
 menu(mouvement);
 visite(mouvement, ouverture);
 catalogue();

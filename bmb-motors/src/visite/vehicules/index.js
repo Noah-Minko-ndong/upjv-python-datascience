@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { creerMaquette } from "./maquette.js";
 import { creerPhotos360 } from "./photos360.js";
 import { chargerGLB } from "./glb.js";
+import { chargerPhoto } from "./photo.js";
 
 function gabaritPar(def) {
   return def.rendu?.gabarit || (def.categorie === "4x4" ? "tout-terrain" : "suv");
@@ -36,6 +37,14 @@ export function creerVehicule(def, ctx) {
         objet.userData.dimensions = { longueur: 4.6, largeur: 1.9 };
         majRendu = (camera) => p.maj(camera, objet);
         type = "photos";
+        return;
+      }
+      if (r.type === "photo") {
+        const p = await chargerPhoto(r);
+        objet.clear(); reflet.clear();
+        objet.add(p.groupe); reflet.add(p.reflet);
+        objet.userData.dimensions = p.dimensions;
+        type = "photo";
         return;
       }
       if (r.type === "glb") {

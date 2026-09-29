@@ -418,3 +418,119 @@ em { font-style: normal; color: var(--orange); }
   .intro-marque span, .panneau .l > span, .menu-grand { transform: none !important; }
   .js-anim .revele-image { clip-path: none; }
 }
+
+/* ————— Vitrine d'accueil (carrousel produit) ————— */
+.vitrine {
+  --vit-fond: #10120C; --vit-texte: #DDE6C8; --vit-feuille: #FF5A1F; --vit-feuille-sombre: #7A2C0C;
+  position: relative; height: 100vh; height: 100svh; min-height: 620px; overflow: hidden; isolation: isolate;
+  background: var(--vit-fond); transition: background-color .9s var(--courbe); outline: none; touch-action: pan-y;
+}
+.vit-palmes { position: absolute; inset: -4%; width: 108%; height: 108%; z-index: 0; }
+.vit-palmes path { transition: fill .9s var(--courbe); }
+.palme-sombre path { fill: var(--vit-feuille-sombre); }
+.palme-moyenne path { fill: color-mix(in srgb, var(--vit-feuille) 62%, #000); }
+.palme-vive path { fill: var(--vit-feuille); }
+.vit-palmes .nervure { fill: none !important; stroke: rgba(0, 0, 0, 0.28); stroke-width: 4; }
+.vit-grain { /* assombrit le centre pour détacher la voiture, vignette sur les bords */
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(55% 50% at 52% 58%, color-mix(in srgb, var(--vit-fond) 88%, transparent) 0%, color-mix(in srgb, var(--vit-fond) 40%, transparent) 55%, transparent 80%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 22%, transparent 70%, rgba(0, 0, 0, 0.55));
+}
+.vit-mot {
+  position: absolute; z-index: 2; left: 50%; top: 13%; margin: 0; transform: translateX(-50%);
+  font: 900 100px/0.8 var(--f-titre); font-stretch: 62%; letter-spacing: -0.01em; color: var(--vit-texte);
+  white-space: nowrap; transition: color .9s;
+}
+.vit-lettres { display: flex; overflow: hidden; padding-top: 0.04em; }
+.vit-lettres > span { display: block; }
+.vit-categorie {
+  position: absolute; right: -0.1em; top: -0.02em; transform: rotate(-8deg);
+  padding: 6px 12px; border-radius: 999px; background: var(--orange); color: var(--noir);
+  font: 600 clamp(11px, 1.1vw, 15px)/1 var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; font-style: normal;
+}
+.vit-route { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.vit-route-arriere { z-index: 3; }
+.vit-route-avant { z-index: 5; }
+.route-bande { fill: none; stroke: var(--vit-texte); stroke-width: 46; stroke-linecap: round; transition: stroke .9s; }
+.route-ombre { fill: none; stroke: rgba(0, 0, 0, 0.35); stroke-width: 60; stroke-linecap: round; transform: translate(0, 10px); }
+.route-ligne { fill: none; stroke: var(--vit-fond); stroke-width: 3; transition: stroke .9s; }
+
+.vit-voiture { position: absolute; z-index: 4; left: 0; right: 0; margin-inline: auto; bottom: 7%; width: min(36vw, 540px); will-change: transform; }
+.vit-voiture img { width: 100%; height: auto; filter: drop-shadow(0 38px 30px rgba(0, 0, 0, 0.55)) drop-shadow(0 6px 6px rgba(0, 0, 0, 0.4)); }
+.vit-voiture::after { content: ""; position: absolute; z-index: -1; left: 6%; right: 6%; bottom: -3%; height: 12%; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, 0.7), transparent); }
+.vitrine[data-cadrage="sortie"] .vit-voiture { bottom: -3%; width: min(40vw, 560px); }
+.vitrine[data-cadrage="sortie"] .vit-voiture::after { display: none; }
+
+.vit-flottants { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.vit-flottant { position: absolute; display: block; transform: rotate(var(--rot)); filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.45)); }
+.vit-flottant svg { display: block; width: 100%; height: auto; }
+.vit-feuille { color: var(--vit-texte); opacity: 0.9; }
+.vit-roue { color: var(--os); }
+.vit-etincelle { color: var(--orange); }
+
+.vit-gauche { position: absolute; z-index: 7; left: var(--g); bottom: 13%; width: min(360px, 30vw); display: grid; justify-items: start; gap: 0; }
+.vit-index { display: flex; align-items: baseline; gap: 8px; margin: 0 0 14px; font: 900 64px/0.8 var(--f-titre); font-stretch: 62%; color: var(--vit-texte); }
+.vit-total { font: 500 12px var(--f-mono); letter-spacing: 0.1em; color: var(--os); opacity: 0.7; }
+.vit-badge { position: relative; width: 116px; height: 116px; margin: 0 0 18px; }
+.vit-badge svg { width: 100%; height: 100%; }
+.vit-badge text { font: 600 15px var(--f-mono); letter-spacing: 0.24em; fill: var(--os); }
+.vit-badge-centre { position: absolute; inset: 33%; }
+.vit-badge-centre svg { width: 100%; height: 100%; color: var(--os); }
+.vit-surtitre { margin: 0 0 8px; color: var(--os); opacity: 0.85; }
+.vit-slogan { margin: 0 0 12px; font: 800 clamp(30px, 3.2vw, 46px)/0.98 var(--f-titre); font-stretch: 100%; letter-spacing: -0.02em; text-transform: lowercase; color: var(--os); }
+.vit-texte { margin: 0 0 20px; font-size: 14px; color: rgba(242, 240, 235, 0.78); max-width: 34ch; }
+.vit-action { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.vit-essai {
+  display: inline-flex; align-items: center; gap: 12px; height: 50px; padding: 0 8px 0 22px; border-radius: 999px;
+  background: var(--os); color: var(--noir); text-decoration: none; font: 700 13px var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  transition: background-color .3s;
+}
+.vit-essai i { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--orange); font-style: normal; font-size: 18px; transition: transform .5s var(--courbe); }
+.vit-essai:hover { background: var(--vit-texte); }
+.vit-essai:hover i { transform: rotate(90deg); }
+.vit-prix { margin: 0; display: grid; font: 800 22px/1.1 var(--f-titre); font-stretch: 100%; color: var(--vit-texte); }
+.vit-prix .mono { color: var(--os); opacity: 0.7; font-size: 10px; }
+.vit-prix .a-completer { color: var(--os); opacity: 0.8; }
+
+.vit-specs { position: absolute; z-index: 7; right: var(--g); top: 50%; transform: translateY(-40%); margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.vit-spec {
+  display: flex; align-items: center; gap: 12px; min-width: 210px; padding: 8px 18px 8px 8px; border-radius: 999px;
+  background: color-mix(in srgb, var(--vit-fond) 55%, transparent); border: 1px solid color-mix(in srgb, var(--vit-texte) 30%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.vit-spec-icone { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--vit-texte); color: var(--vit-fond); transition: background-color .9s, color .9s; }
+.vit-spec-texte { display: grid; font-size: 14px; font-weight: 600; line-height: 1.25; }
+.vit-spec-texte .mono { font-size: 10px; opacity: 0.7; }
+.vit-spec .a-completer { font-size: 12px; }
+
+.vit-nav { position: absolute; z-index: 7; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 22px); transform: translateX(-50%); display: flex; align-items: center; gap: 14px; }
+.vit-fleche { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(242, 240, 235, 0.4); background: rgba(0, 0, 0, 0.25); color: var(--os); cursor: pointer; transition: background-color .3s, color .3s; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.vit-fleche:hover { background: var(--os); color: var(--noir); }
+.vit-points { display: flex; gap: 8px; }
+.vit-point { position: relative; width: 10px; height: 10px; padding: 0; border: 0; border-radius: 999px; background: rgba(242, 240, 235, 0.35); cursor: pointer; overflow: hidden; transition: width .5s var(--courbe); }
+.vit-point[aria-selected="true"] { width: 44px; }
+.vit-point i { position: absolute; inset: 0; background: var(--orange); transform: scaleX(0); transform-origin: left; }
+.vit-minute .vit-point[aria-selected="true"] i { animation: minute var(--vit-duree, 8s) linear forwards; }
+@keyframes minute { to { transform: none; } }
+.vit-annonce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+@media (max-width: 899px) {
+  .vit-mot { top: calc(env(safe-area-inset-top, 0px) + 92px); }
+  .vit-voiture { bottom: auto; top: 24svh; width: min(76vw, 420px); }
+  .vitrine[data-cadrage="sortie"] .vit-voiture { top: 26svh; bottom: auto; width: min(84vw, 440px); }
+  .vit-gauche { left: var(--g); right: var(--g); bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); width: auto; }
+  .vit-index { position: absolute; left: 0; top: auto; bottom: 100%; margin: 0 0 calc(24svh + 8px); font-size: 40px; display: none; }
+  .vit-badge { display: none; }
+  .vit-texte { display: none; }
+  .vit-slogan { font-size: clamp(28px, 8vw, 38px); }
+  .vit-specs {
+    left: 0; right: 0; top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px + 196px); transform: none;
+    display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 0 var(--g);
+  }
+  .vit-specs::-webkit-scrollbar { display: none; }
+  .vit-spec { min-width: 0; flex: none; padding: 6px 14px 6px 6px; }
+  .vit-spec-icone { width: 30px; height: 30px; }
+  .vit-flottant { scale: 0.7; }
+}
+@media (max-width: 899px) and (max-height: 700px) { .vit-specs { display: none; } }

@@ -23,6 +23,9 @@ export const CONTACT = {
 //       Série de photos détourées prises autour du véhicule (voir assets/vehicules/LISEZMOI.md).
 //       largeurImage = largeur réelle, en mètres, couverte par la largeur de l'image ;
 //       sol = hauteur des pneus au sol dans l'image, en fraction de sa hauteur.
+//   { type: "photo", image: "assets/vehicules/vitrine/212.webp", largeur: 2.75, sol: 0.02 }
+//       Une seule photo détourée, vue de face : la caméra s'arrête face à la place sans tourner.
+//       largeur = largeur réelle, en mètres, couverte par l'image.
 //   { type: "glb", fichier: "assets/vehicules/212.glb", longueur: 4.4, rotation: 0 }
 //       Modèle 3D sous licence. Il est mis à l'échelle sur « longueur » (en mètres).
 // Si les photos ou le modèle ne se chargent pas, la maquette prend le relais.
@@ -40,7 +43,14 @@ export const VISITE = [
     prix: null,               // nombre en FCFA, ex. 18500000
     couleur: "#66735C",
     toit: "#E9E9E4",
-    rendu: { type: "maquette", gabarit: "tout-terrain" },
+    // Photo détourée : affichée en face de sa place pendant la visite (la caméra reste de face).
+    rendu: { type: "photo", image: "assets/vehicules/vitrine/212.webp", largeur: 2.75, sol: 0.02 },
+    // Vitrine d'accueil : photo détourée, couleurs de la diapositive et slogan (modifiable).
+    vitrine: {
+      image: "assets/vehicules/vitrine/212.webp",
+      slogan: ["brut.", "carré.", "prêt à partir."],
+      fond: "#10120C", texte: "#DDE6C8", feuille: "#FF5A1F", feuilleSombre: "#7A2C0C",
+    },
   },
   {
     id: "toyota",
@@ -56,6 +66,13 @@ export const VISITE = [
     couleur: "#1D4FB8",
     toit: "#15171A",
     rendu: { type: "maquette", gabarit: "suv" },
+    // Photo provisoire (recadrée sur l'avant) : à remplacer par une photo entière du véhicule.
+    vitrine: {
+      image: "assets/vehicules/vitrine/toyota.webp",
+      cadrage: "sortie",      // la photo sort du cadre par la gauche, comme un produit tenu en main
+      slogan: ["fiable.", "urbain.", "serein."],
+      fond: "#0A0F22", texte: "#CFE0FF", feuille: "#FF5A1F", feuilleSombre: "#1B2D6B",
+    },
   },
 ];
 
